@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SoftUni Beers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../styles/styles.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/form.css" />
+
+    <script src="main.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="topnav">
+            <a class="logo" href="index.html"><img src="../images/logo.png"></a>
+            <a href="index.html">Home</a>
+            <a href="all-beers.html">See All Beers</a>
+            <a class="active" href="order.html">Order a Beer</a>
+            <a class="right" href="register.html">Register</a>
+            <a class="right" href="login.html">Log In</a>
+        </div>
+    </nav>
+
+    <main>
+        <center>
+            <h1>Order a Beer</h1>
+            <br/>
+            <form>
+                <label>Brand:</label>
+                <select>
+                    <option selected disabled>Select a brand</option>
+                    <option>Corona Extra 330ml</option>
+                    <option>Stella Artois 550ml</option>
+                    <option>Carlsberg 330ml</option>
+                </select>
+                <label>Quantity:</label>
+                <input type="number" min="1" max="15" placeholder="Enter ammount of beers (1-15)"/>
+                <label>Destination:</label>
+                <select>
+                    <option selected disabled>Select a destination</option>
+                    <option>Destination 1</option>
+                    <option>Destination 2</option>
+                    <option>Destination 3</option>
+                </select>
+                <label>Birthdate:</label>
+                <input type="date" placeholder="mm/dd/yyyy" >
+                <label>Got an opinion, comment, recommendation? Share it with us!:</label>
+                <textarea cols="30" rows="10" placeholder="Share your opinion with us!"></textarea>
+                <input type="submit" value="Register">
+            </form>
+        </center>
+    </main>
+
+    <footer>
+        <hr/>
+        <p><em>&copy; 2018 &ndash; SoftUni Beers</em></p>
+    </footer>
+</body>
+</html>
