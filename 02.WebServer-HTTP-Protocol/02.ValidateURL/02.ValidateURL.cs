@@ -1,69 +1,61 @@
-﻿using System;
-using System.Net;
-using System.Text.RegularExpressions;
-
-namespace _02.ValidateURL
+﻿namespace _02.ValidateURL
 {
-    public class Program
+    using System;
+    using System.Net;
+    using System.Text;
+    using System.Text.RegularExpressions;
+
+    public class ValidateUrl
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
-            string input = Console.ReadLine();
-            string decodedURL = WebUtility.UrlDecode(input);
-
-            Regex validURLregex = new Regex(@"(?<protocol>http|https):\/\/(www\.)*(?<host>[A-Za-z-]+)\.(?<domain>\w+)(?<port>:\d+)*(?<path>.+)*");
-
-            Regex queryRegex = new Regex(@"(?<path>.+)\?(?<query>.+)(?<fragment>#.*)*");
-
-            Regex fragmentRegex = new Regex(@"(?<fragment>#.*)");
-
-            if (validURLregex.IsMatch(input))
+            while (true)
             {
-                Console.WriteLine("yes");
-                Match match = validURLregex.Match(input);
+                string encodedURL = Console.ReadLine();
+                string decodedURL = DecodeURL(encodedURL);
 
-                string protocol = match.Groups["protocol"].Value;
-                string host = match.Groups["host"].Value;
-                string domain = match.Groups["domain"].Value;
-                string port = match.Groups["port"].Value;
-                string path = match.Groups["path"].Value;
-               
-                if (host == "https" && port != "443" || host == "http" && port != "80")
+                string validationResult = ValidateURL(decodedURL);
+
+                Console.WriteLine(validationResult);
+            }
+        }
+
+        private static string ValidateURL(string decodedURL)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            Uri url;
+            bool URLIsValid = Uri.TryCreate(decodedURL, UriKind.Absolute, out url)
+                && (url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps);
+
+            if (URLIsValid)
+            {
+                sb.AppendLine($"Protocol: {url.Scheme}");
+                sb.AppendLine($"Host: {url.Host}");
+                sb.AppendLine($"Port: {url.Port}");
+                sb.AppendLine($"Path: {url.AbsolutePath}");
+
+                if (url.Query != "")
                 {
-                    Console.WriteLine("Invalid URL");
+                    sb.AppendLine($"Query: {url.Query.TrimStart('?')}");
                 }
-                else
+                if (url.Fragment != "")
                 {
-                    Console.WriteLine($"Protocol: {protocol}");
-                    Console.WriteLine($"Host: {host}.{domain}");
-
-                    string defaultPort = protocol == "https" ? "443" : "80";
-                    Console.WriteLine($"Port: {defaultPort}");
-
-                    if (queryRegex.IsMatch(path))
-                    {
-                        Match queryMatch = queryRegex.Match(path);
-                        string query = queryMatch.Groups["query"].Value;
-                        string queryPath = queryMatch.Groups["path"].Value;
-
-                        Console.WriteLine($"Path: {queryPath}");
-                        Console.WriteLine($"Query: {query}");
-
-                        if(fragmentRegex.IsMatch(query))
-                        {
-                            Match fragmentMatch = fragmentRegex.Match(query);
-                            string fragment = fragmentMatch.Groups["fragment"].Value;
-                            //TODO:
-
-                            Console.WriteLine($"Fragment: {fragment}");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Path: {path}");
-                    }
+                    sb.AppendLine($"Fragment: {url.Fragment.TrimStart('#')}");
                 }
             }
+            else
+            {
+                sb.AppendLine("Invalid URL");
+            }
+
+            return sb.ToString().Trim();
+        }
+
+        private static string DecodeURL(string encodedURL)
+        {
+            encodedURL = WebUtility.UrlDecode(encodedURL);
+            return encodedURL;
         }
     }
 }
