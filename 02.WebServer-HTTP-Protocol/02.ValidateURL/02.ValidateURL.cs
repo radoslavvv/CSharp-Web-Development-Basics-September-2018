@@ -30,18 +30,25 @@
 
             if (URLIsValid)
             {
-                sb.AppendLine($"Protocol: {url.Scheme}");
-                sb.AppendLine($"Host: {url.Host}");
-                sb.AppendLine($"Port: {url.Port}");
-                sb.AppendLine($"Path: {url.AbsolutePath}");
-
-                if (url.Query != "")
+                if (!url.IsDefaultPort)
                 {
-                    sb.AppendLine($"Query: {url.Query.TrimStart('?')}");
+                    return "Invalid URL";
                 }
-                if (url.Fragment != "")
+                else
                 {
-                    sb.AppendLine($"Fragment: {url.Fragment.TrimStart('#')}");
+                    sb.AppendLine($"Protocol: {url.Scheme}");
+                    sb.AppendLine($"Host: {url.Host}");
+                    sb.AppendLine($"Port: {url.Port}");
+                    sb.AppendLine($"Path: {url.AbsolutePath}");
+
+                    if (url.Query != "")
+                    {
+                        sb.AppendLine($"Query: {url.Query.TrimStart('?')}");
+                    }
+                    if (url.Fragment != "")
+                    {
+                        sb.AppendLine($"Fragment: {url.Fragment.TrimStart('#')}");
+                    }
                 }
             }
             else
