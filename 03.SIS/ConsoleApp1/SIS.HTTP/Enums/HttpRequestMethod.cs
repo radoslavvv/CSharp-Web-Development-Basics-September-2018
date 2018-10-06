@@ -6,9 +6,9 @@ namespace SIS.HTTP.Enums
 {
     public enum HttpRequestMethod
     {
-        Get,
-        Post,
-        Put,
-        Delete
+        GET,
+        POST,
+        PUT,
+        DELETE
     }
 }

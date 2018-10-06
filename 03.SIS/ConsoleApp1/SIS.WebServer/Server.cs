@@ -32,7 +32,7 @@ namespace SIS.WebServer
             this.listerner.Start();
             this.isRunning = true;
 
-            Console.WriteLine($"Server is running on http://${LocalHostIpAddress}:{this.port}");
+            Console.WriteLine($"Server is running on http://{LocalHostIpAddress}:{this.port}");
 
             Task task = Task.Run(this.ListenLoop);
             task.Wait();

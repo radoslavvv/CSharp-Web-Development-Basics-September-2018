@@ -18,13 +18,12 @@ namespace SIS.HTTP.Headers
         {
             if (header == null ||
                 string.IsNullOrEmpty(header.Key) ||
-                string.IsNullOrEmpty(header.Value) ||
-                this.ContainsHeader(header.Key))
+                string.IsNullOrEmpty(header.Value))
             {
-                throw new Exception();
+                throw new Exception("Header is invalid!");
             }
 
-            this.headers.Add(header.Key, header);
+            this.headers[header.Key] = header;
         }
 
         public bool ContainsHeader(string key)

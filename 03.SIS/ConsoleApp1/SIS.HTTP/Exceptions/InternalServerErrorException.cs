@@ -10,7 +10,7 @@ namespace SIS.HTTP.Exceptions
     {
         public const string ErrorMessage = "The Server has encountered an error.";
 
-        public const HttpStatusCode StatusCode = HttpStatusCode.InternalServerError;
+       // public const HttpStatusCode StatusCode = HttpStatusCode.InternalServerError;
 
         public InternalServerErrorException() 
             : base(ErrorMessage)

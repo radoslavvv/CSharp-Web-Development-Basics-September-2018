@@ -1,5 +1,4 @@
-﻿
-using SIS.HTTP.Enums;
+﻿using SIS.HTTP.Enums;
 using System;
 using System.Collections.Generic;
 using System.Net;

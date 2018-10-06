@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIS", "ConsoleApp1\SIS.csproj", "{5CCACD44-ED9C-4A12-A057-44E1910A1E79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIS", "SIS\SIS.csproj", "{5CCACD44-ED9C-4A12-A057-44E1910A1E79}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIS.HTTP", "SIS.HTTP\SIS.HTTP.csproj", "{0A201C19-6938-4975-AD2B-7B50AE30CD5D}"
 EndProject

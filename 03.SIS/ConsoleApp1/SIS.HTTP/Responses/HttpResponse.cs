@@ -1,6 +1,7 @@
 ﻿
 using SIS.HTTP.Common;
 using SIS.HTTP.Enums;
+using SIS.HTTP.Extensions;
 using SIS.HTTP.Headers;
 using SIS.HTTP.Headers.Contracts;
 using SIS.HTTP.Responses.Contracts;

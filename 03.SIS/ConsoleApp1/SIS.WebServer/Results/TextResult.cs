@@ -1,5 +1,6 @@
 ﻿
 
+using SIS.HTTP.Enums;
 using SIS.HTTP.Headers;
 using SIS.HTTP.Responses;
 using System.Net;
@@ -9,7 +10,7 @@ namespace SIS.WebServer.Results
 {
     public class TextResult : HttpResponse
     {
-        public TextResult(string content, HttpStatusCode statusCode) 
+        public TextResult(string content, HttpResponseStatusCode statusCode) 
             : base(statusCode)
         {
             this.Headers.Add(new HttpHeader("Content-Type", "text/plain"));

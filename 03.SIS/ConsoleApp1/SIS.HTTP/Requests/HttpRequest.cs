@@ -26,7 +26,7 @@ namespace SIS.HTTP.Requests
         {
             string[] splitRequestContent = requestString.Split(Environment.NewLine, StringSplitOptions.None);
 
-            string[] requestLine = splitRequestContent[0].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] requestLine = splitRequestContent[0].Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (!this.ValidateRequestLine(requestLine))
             {

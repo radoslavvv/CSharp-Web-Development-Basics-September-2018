@@ -7,7 +7,7 @@ namespace SIS.HTTP.Exceptions
 {
     public class BadRequestException : Exception
     {
-        public const HttpStatusCode StatusCode = HttpStatusCode.BadRequest;
+       // public const HttpStatusCode StatusCode = HttpStatusCode.BadRequest;
 
         private const string ErrorMessage = "The Request was malformed or contains unsupported elements.";
 
