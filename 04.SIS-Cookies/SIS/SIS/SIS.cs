@@ -6,9 +6,9 @@ using System;
 
 namespace ConsoleApp1
 {
-    class SIS
+    public class SIS
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             ServerRoutingTable serverRoutingTable = new ServerRoutingTable();
             serverRoutingTable.Routes[HttpRequestMethod.GET]["/"] = request => new HomeController().Index();

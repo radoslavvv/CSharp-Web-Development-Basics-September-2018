@@ -1,13 +1,17 @@
 ﻿using SIS.HTTP.Common;
+using SIS.HTTP.Cookies;
+using SIS.HTTP.Cookies.Contracts;
 using SIS.HTTP.Enums;
 using SIS.HTTP.Exceptions;
 using SIS.HTTP.Headers;
 using SIS.HTTP.Headers.Contracts;
 using SIS.HTTP.Requests.Contracts;
+using SIS.HTTP.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SIS.HTTP.Requests
 {
@@ -18,6 +22,7 @@ namespace SIS.HTTP.Requests
             this.FormData = new Dictionary<string, object>();
             this.QueryData = new Dictionary<string, object>();
             this.Headers = new HttpHeadersCollection();
+            this.Cookies = new HttpCookieCollection();
 
             this.ParseRequest(requestString);
         }
@@ -41,12 +46,34 @@ namespace SIS.HTTP.Requests
 
             this.ParseHeaders(splitRequestContent.Skip(1).ToArray());
 
+            this.ParseCookies();
+
             bool requestHasBody = splitRequestContent.Length > 1;
+
+            this.ParseRequestParameters(splitRequestContent[splitRequestContent.Length - 1], requestHasBody);
+        }
+
+        private void ParseCookies()
+        {
+            if (this.Headers.ContainsHeader("Cookie"))
+            {
+                HttpHeader cookieHeader = Headers.GetHeader("Cookie");
+
+                string[] cookieKeyValuePair = cookieHeader.Value
+                    .Split("=", StringSplitOptions.RemoveEmptyEntries);
+
+                string cookieKey = cookieKeyValuePair[0];
+                string cookieValue = cookieKeyValuePair[1];
+
+                HttpCookie cookie = new HttpCookie(cookieKey, cookieValue, 3);
+
+                this.Cookies.Add(cookie);
+            }
         }
 
         private void ParseRequestParameters(string bodyParameters, bool requestHasBody)
         {
-            this.ParseQueryParameters(this.Url);
+            //this.ParseQueryParameters(this.Url);
             if (requestHasBody)
             {
                 this.ParseFormDataPrameters(bodyParameters);
@@ -82,19 +109,64 @@ namespace SIS.HTTP.Requests
 
         private void ParseQueryParameters(string url)
         {
-            string queryParameters = this.Url?
-                .Split(new char[] { '?', '#' })
-                .Skip(1)
-                .ToArray()[0];
+            string queryPattern = @"\?[^#]*(?=$|#)";
+            Match queryMatch = Regex.Match(this.Url, queryPattern);
 
-            if (string.IsNullOrEmpty(queryParameters))
+            if (queryMatch.Success == false)
+            {
+                return;
+            }
+
+            string query = queryMatch.Groups[0].Value;
+            string[] subQueries = query.Split("&", StringSplitOptions.RemoveEmptyEntries);
+
+            for (int i = 0; i < subQueries.Length; i++)
+            {
+                string[] subQueryKeyValuePair = subQueries[i]
+                    .Split("=", StringSplitOptions.RemoveEmptyEntries);
+
+                if (subQueryKeyValuePair.Length != 2)
+                {
+                    continue;
+                }
+
+                string queryKey = subQueryKeyValuePair[0];
+                string queryValue = subQueryKeyValuePair[1];
+
+                this.QueryData.Add(queryKey, queryKey);
+            }
+
+            if (!this.IsValidRequestQueryString(query, subQueries))
             {
                 throw new BadRequestException();
             }
 
-            string[] queryKeyValuePairs = queryParameters.Split('&', StringSplitOptions.RemoveEmptyEntries);
+            //string[] queryParameters = this.Url?
+            //    .Split(new char[] { '?', '#' });
 
-            ExtractRequestParameters(queryKeyValuePairs, this.QueryData);
+            //if (queryParameters.Length == 0)
+            //{
+            //    throw new BadRequestException();
+            //}
+
+            //string[] queryKeyValuePairs = queryParameters.Split('&', StringSplitOptions.RemoveEmptyEntries);
+
+            //ExtractRequestParameters(queryKeyValuePairs, this.QueryData);
+        }
+
+        private bool IsValidRequestQueryString(string queryString, string[] subQueries)
+        {
+            if (string.IsNullOrWhiteSpace(queryString))
+            {
+                return false;
+            }
+
+            if (subQueries.Length == 0)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private void ParseHeaders(string[] requestHeaders)
@@ -176,6 +248,10 @@ namespace SIS.HTTP.Requests
 
             return false;
         }
+
+        public HTTP.Sessions.IHttpSession Session { get; set; }
+
+        public IHttpCookieCollection Cookies { get; }
 
         public string Path { get; private set; }
 
